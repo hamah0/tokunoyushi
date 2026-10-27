@@ -19,6 +19,9 @@ body {
   background:
     radial-gradient(ellipse at 50% 40%, #f3f2ee 0%, #d8d7d2 60%, #c7c6c0 100%);
   -webkit-tap-highlight-color: transparent;
+  /* 모바일에서 두 번 탭해도 확대되지 않게 (스크롤·끌기는 그대로) */
+  touch-action: manipulation;
+  -webkit-text-size-adjust: 100%;
 }
 
 .stage {
