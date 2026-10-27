@@ -400,6 +400,12 @@
   setInterval(tick, 1000);
 
   // 설정 앱 등에서 상태 표시줄을 다시 그릴 때
+  /* ---------- 모바일 확대 막기 ----------
+   * 두 번 탭 확대는 CSS touch-action: manipulation (device.css)으로 막음.
+   * (빠르게 키보드를 쳐도 글자가 빠지지 않도록 터치 이벤트는 건드리지 않음)
+   * 아이폰 Safari의 두 손가락 확대만 따로 막음 */
+  document.addEventListener("gesturestart", function (e) { e.preventDefault(); });
+
   /* ---------- 다른 코드에서 쓰는 도구 ---------- */
   YUSHI.getState = function () { return state; };
   YUSHI.currentApp = function () { return openAppEl ? openAppEl.getAttribute("data-app") : null; };
