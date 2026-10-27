@@ -169,8 +169,8 @@ YUSHI.data.apps = {
   // EXO·카이 / 현대무용 / 곰신카페 / 군인 남자친구 / 전역 선물
   webSearches: [
     // 1월
-    { time: "2013-01-12 14:18", q: "EXO" },
-    { time: "2013-01-12 14:25", q: "EXO 카이" },
+    { time: "2013-01-14 14:18", q: "EXO" },
+    { time: "2013-01-14 14:25", q: "EXO 카이" },
     { time: "2013-01-17 23:40", q: "피나 바우쉬 카페 뮐러" },
     { time: "2013-01-24 22:10", q: "파주 맛집" },
     { time: "2013-01-27 23:52", q: "곰신카페" },
@@ -191,8 +191,8 @@ YUSHI.data.apps = {
   // 매일이 아니라 필요할 때 들어간 것처럼 간격을 두었습니다.
   webHistory: [
     // 1월
-    { time: "2013-01-12 14:19", title: "EXO - Google 검색", url: "www.google.co.kr/search?q=EXO" },
-    { time: "2013-01-12 14:26", title: "EXO 카이 - Google 검색", url: "www.google.co.kr/search?q=EXO 카이" },
+    { time: "2013-01-14 14:19", title: "EXO - Google 검색", url: "www.google.co.kr/search?q=EXO" },
+    { time: "2013-01-14 14:26", title: "EXO 카이 - Google 검색", url: "www.google.co.kr/search?q=EXO 카이" },
     { time: "2013-01-17 23:41", title: "피나 바우쉬 카페 뮐러 - Google 검색", url: "www.google.co.kr/search?q=피나 바우쉬 카페 뮐러" },
     { time: "2013-01-24 22:11", title: "파주 맛집 - Google 검색", url: "www.google.co.kr/search?q=파주 맛집" },
     { time: "2013-01-27 23:53", title: "곰신카페 - Google 검색", url: "www.google.co.kr/search?q=곰신카페" },
