@@ -1,0 +1,616 @@
+/*
+ * 화면 안쪽 — iOS 6 시절 인터페이스
+ * -----------------------------------------
+ * 모든 크기는 320 × 568 화면 기준(포인트)입니다.
+ */
+
+.screen {
+  font-family: "Helvetica Neue", Helvetica, "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji";
+  color: #fff;
+  -webkit-font-smoothing: antialiased;
+}
+
+.layer {
+  position: absolute;
+  inset: 0;
+}
+
+/* 층 순서: 홈 < 앱 < 잠금 < 꺼짐 */
+.home      { z-index: 1; }
+.app-layer { z-index: 2; }
+.lock      { z-index: 3; }
+
+.is-hidden { display: none !important; }
+
+/* ---------- 배경화면 (이미지 없이 CSS로 그린 기본 배경) ---------- */
+.wallpaper {
+  position: absolute;
+  inset: 0;
+  background-color: #0e2a44;
+  background-image:
+    radial-gradient(ellipse 70% 45% at 22% 18%, rgba(120, 190, 230, 0.55), transparent 70%),
+    radial-gradient(ellipse 60% 40% at 85% 62%, rgba(40, 120, 170, 0.55), transparent 70%),
+    radial-gradient(ellipse 90% 50% at 50% 100%, rgba(10, 40, 70, 0.9), transparent 75%),
+    radial-gradient(circle at 70% 30%, rgba(255, 255, 255, 0.10) 0 2px, transparent 3px),
+    radial-gradient(circle at 30% 55%, rgba(255, 255, 255, 0.08) 0 3px, transparent 4px),
+    linear-gradient(165deg, #2b6f9c 0%, #164a73 40%, #0c2742 100%);
+  background-size: cover;
+  background-position: center;
+}
+
+/* ---------- 상태 표시줄 (20pt) ---------- */
+.statusbar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 20px;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 5px 0 6px;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 20px;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.statusbar[data-variant="home"] { background: rgba(0, 0, 0, 0.6); }
+
+/* 잠금 화면 상태 표시줄: 회색 반투명 */
+.statusbar[data-variant="lock"] {
+  background: linear-gradient(rgba(118, 120, 124, 0.6), rgba(84, 86, 90, 0.6));
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.35);
+}
+
+.sb-wifi { display: block; width: 15px; height: 11px; margin-left: 1px; }
+
+/* 앱 안에서는 내비게이션 막대 색에 맞춘 회청색 */
+.statusbar[data-variant="app"] {
+  background: linear-gradient(var(--sb-top, #8a9cb5), var(--sb-bottom, #6e819e));
+  border-bottom: 1px solid var(--sb-line, #5f7290);
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.35);
+}
+
+.sb-left, .sb-right {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 96px;
+}
+.sb-right { justify-content: flex-end; }
+
+.sb-center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.sb-signal {
+  display: flex;
+  align-items: flex-end;
+  gap: 1px;
+  height: 11px;
+}
+.sb-signal i {
+  display: block;
+  width: 3px;
+  background: rgba(255, 255, 255, 0.3);
+}
+.sb-signal i.on { background: #fff; }
+
+.sb-lock { display: block; width: 9px; height: 12px; margin-top: 1px; }
+
+.sb-battery {
+  position: relative;
+  width: 24px;
+  height: 11px;
+  border: 1px solid #fff;
+  border-radius: 2px;
+  padding: 1px;
+}
+.sb-battery::after {
+  content: "";
+  position: absolute;
+  right: -3px;
+  top: 3px;
+  width: 2px;
+  height: 4px;
+  background: #fff;
+  border-radius: 0 1px 1px 0;
+}
+.sb-battery b {
+  display: block;
+  height: 100%;
+  background: #fff;
+}
+
+/* ---------- 잠금 화면 ---------- */
+.lock-top,
+.lock-bottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  transition: transform 0.28s ease-in;
+}
+
+.lock-top {
+  top: 20px;
+  height: 95px;
+  text-align: center;
+  /* 회색 반투명 막대 + 위쪽 광택 */
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0) 50%),
+    linear-gradient(rgba(128, 130, 134, 0.5), rgba(76, 78, 82, 0.55));
+  border-top: 1px solid rgba(255, 255, 255, 0.25);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
+}
+
+.lock-time {
+  margin-top: 3px;
+  font-size: 64px;
+  font-weight: 200;
+  line-height: 66px;
+  letter-spacing: 0;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.6);
+}
+
+.lock-date {
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 18px;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.6);
+}
+
+.lock-bottom {
+  bottom: 0;
+  height: 96px;
+  /* 회색 반투명 막대 + 위쪽 광택 */
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0) 50%),
+    linear-gradient(rgba(118, 120, 124, 0.52), rgba(70, 72, 76, 0.58));
+  border-top: 1px solid rgba(255, 255, 255, 0.28);
+  box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+}
+
+.slider {
+  position: absolute;
+  left: 21px;
+  top: 23px;
+  width: 226px;
+  height: 50px;
+  border-radius: 10px;
+  background: linear-gradient(#141414, #2a2a2a);
+  box-shadow:
+    inset 0 2px 4px rgba(0, 0, 0, 0.85),
+    0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+/* iOS 6의 빛이 지나가는 '밀어서 잠금 해제' 글자 */
+.slider-text {
+  position: absolute;
+  left: 76px;
+  right: 6px;
+  top: 0;
+  line-height: 50px;
+  font-size: 19px;
+  text-align: center;
+  white-space: nowrap;
+  color: #8a8a8a;
+  background: linear-gradient(90deg, #6f6f6f 0%, #6f6f6f 40%, #ffffff 50%, #6f6f6f 60%, #6f6f6f 100%);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 2.6s linear infinite;
+}
+
+@keyframes shimmer {
+  from { background-position: 100% 0; }
+  to   { background-position: 0% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slider-text { animation: none; -webkit-text-fill-color: #9a9a9a; }
+}
+
+.slider-knob {
+  position: absolute;
+  left: 3px;
+  top: 3px;
+  width: 68px;
+  height: 44px;
+  border-radius: 8px;
+  cursor: grab;
+  touch-action: none;
+  background: linear-gradient(#fdfdfd 0%, #e4e4e4 48%, #cdcdcd 52%, #dedede 100%);
+  box-shadow:
+    inset 0 1px 0 #fff,
+    0 0 0 1px rgba(0, 0, 0, 0.55),
+    0 1px 2px rgba(0, 0, 0, 0.6);
+}
+.slider-knob:active { cursor: grabbing; }
+.slider-knob:focus-visible { outline: 2px solid #4a90e2; outline-offset: 1px; }
+.slider-knob.is-returning { transition: left 0.22s ease-out; }
+
+.slider-knob svg {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 30px;
+  height: 22px;
+  margin: -11px 0 0 -15px;
+  fill: #8e8e8e;
+  filter: drop-shadow(0 1px 0 #fff);
+}
+
+/* 카메라 손잡이: 화면 장식 (이번 단계에서는 동작 없음) */
+.camera-grabber {
+  position: absolute;
+  right: 18px;
+  top: 30px;
+  width: 44px;
+  height: 36px;
+  border-radius: 6px;
+  background: linear-gradient(#3a3a3a, #1c1c1c);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    0 0 0 1px rgba(0, 0, 0, 0.7);
+}
+.camera-grabber svg {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 26px;
+  height: 20px;
+  margin: -10px 0 0 -13px;
+  fill: #a8a8a8;
+}
+
+/* 잠금 해제 동작: 위아래 막대가 화면 밖으로 빠짐 */
+.lock.is-unlocking .lock-top    { transform: translateY(-120px); }
+.lock.is-unlocking .lock-bottom { transform: translateY(100px); }
+.lock.is-unlocking .statusbar,
+.lock.is-unlocking .wallpaper   { opacity: 0; transition: opacity 0.28s ease-in; }
+
+/* ---------- 홈 화면 ---------- */
+.springboard {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 28px;
+  display: grid;
+  grid-template-columns: repeat(4, 76px);
+  grid-auto-rows: 88px;
+  justify-content: center;
+}
+
+.app-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 76px;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+}
+
+button.app-icon { cursor: pointer; }
+button.app-icon:focus-visible .icon { outline: 2px solid #fff; outline-offset: 2px; }
+
+.icon {
+  position: relative;
+  width: 57px;
+  height: 57px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.6),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+
+/* 위쪽 절반의 둥근 광택 — 당시 아이콘의 핵심 표현 */
+.icon::after {
+  content: "";
+  position: absolute;
+  left: -30%;
+  right: -30%;
+  top: -48%;
+  height: 96%;
+  border-radius: 50%;
+  background: linear-gradient(rgba(255, 255, 255, 0.62), rgba(255, 255, 255, 0.14));
+  pointer-events: none;
+}
+
+/* 누르는 동안 어둡게 (실제로 열리는 앱만) */
+button.app-icon:active .icon { filter: brightness(0.55); }
+
+.glyph {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 38px;
+  height: 38px;
+  margin: -19px 0 0 -19px;
+  filter: drop-shadow(0 -1px 0 rgba(0, 0, 0, 0.3));
+}
+
+.app-label {
+  margin-top: 4px;
+  max-width: 74px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 11px;
+  font-weight: bold;
+  line-height: 13px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.95);
+}
+
+/* 캘린더 아이콘 */
+.g-cal {
+  position: absolute;
+  inset: 0;
+  text-align: center;
+  color: #222;
+}
+.g-cal-head {
+  height: 15px;
+  font-size: 10px;
+  font-weight: bold;
+  line-height: 15px;
+  color: #fff;
+  background: linear-gradient(#e2574c, #b5281e);
+  border-bottom: 1px solid #8f1f18;
+}
+.g-cal-day {
+  font-size: 32px;
+  font-weight: bold;
+  line-height: 40px;
+  letter-spacing: -1px;
+}
+
+/* 메모 아이콘 */
+.g-notes { position: absolute; inset: 0; }
+.g-notes-top {
+  height: 13px;
+  background: linear-gradient(#9b6a3d, #6e4321);
+  border-bottom: 1px solid #4b2b12;
+}
+.g-notes-lines {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 22px;
+  bottom: 6px;
+  background: repeating-linear-gradient(#fff6b8 0 7px, #c9b977 7px 8px);
+  opacity: 0.9;
+}
+
+/* 페이지 표시 (검색 + 현재 페이지) */
+.page-dots {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 104px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 9px;
+}
+.page-dots .dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+}
+.page-dots .dot.is-on { background: #fff; }
+.page-dots .dot-search {
+  position: relative;
+  width: 7px;
+  height: 7px;
+  border: 1.5px solid rgba(255, 255, 255, 0.45);
+  border-radius: 50%;
+}
+.page-dots .dot-search::after {
+  content: "";
+  position: absolute;
+  right: -3px;
+  bottom: -3px;
+  width: 3px;
+  height: 1.5px;
+  background: rgba(255, 255, 255, 0.45);
+  transform: rotate(45deg);
+}
+
+/* 하단 독: 유리 선반 */
+.dock {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 96px;
+}
+
+.dock-shelf {
+  position: absolute;
+  left: -6px;
+  right: -6px;
+  bottom: 0;
+  height: 62px;
+  transform-origin: 50% 100%;
+  transform: perspective(170px) rotateX(36deg);
+  background: linear-gradient(rgba(240, 246, 252, 0.55), rgba(200, 210, 222, 0.28) 60%, rgba(120, 130, 145, 0.35));
+  border-top: 1px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+
+.dock-shelf::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 14px;
+  background: linear-gradient(rgba(60, 70, 85, 0.5), rgba(20, 25, 35, 0.75));
+  border-top: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.dock-icons {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 8px;
+  display: grid;
+  grid-template-columns: repeat(4, 76px);
+  justify-content: center;
+}
+
+/* 선반 위의 반사 (지원하는 브라우저에서만) */
+.dock-icons .icon {
+  -webkit-box-reflect: below 1px linear-gradient(transparent 72%, rgba(255, 255, 255, 0.22));
+}
+
+.dock-icons .app-label { margin-top: 3px; }
+
+/* ---------- 앱 화면 (다음 단계에서 앱마다 채움) ---------- */
+.app-layer { pointer-events: none; }
+.app-layer.is-open { pointer-events: auto; }
+
+.app {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  color: #222;
+  transform: scale(0.2);
+  opacity: 0;
+  transition: transform 0.25s ease-out, opacity 0.25s ease-out;
+}
+.app.is-shown { transform: none; opacity: 1; }
+
+.navbar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 20px;
+  height: 44px;
+  /* 앱마다 색을 바꾸려면 --nav-1 ~ --nav-4, --nav-line 값을 지정 */
+  background: linear-gradient(var(--nav-1, #b0bccd) 0%, var(--nav-2, #8a9cb5) 50%, var(--nav-3, #7f91ab) 51%, var(--nav-4, #6d84a2) 100%);
+  border-bottom: 1px solid var(--nav-line, #2d3642);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.navbar h1 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 44px;
+  text-align: center;
+  color: #fff;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.45);
+}
+
+.app-body {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 65px;
+  bottom: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* iOS 6 설정 화면풍 세로 줄무늬 배경 */
+.app-body.pinstripe {
+  background: repeating-linear-gradient(90deg, #c5ccd4 0 5px, #cbd2d8 5px 7px);
+}
+
+.app-empty {
+  margin: 150px 30px 0;
+  word-break: keep-all;
+  font-size: 15px;
+  font-weight: bold;
+  line-height: 20px;
+  text-align: center;
+  color: #4c566c;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+/* ---------- 화면 꺼짐 ---------- */
+.screen-off { background: #000; z-index: 20; }
+
+/* 아이콘 칸 전체를 채우는 그림 (icons.js의 art) */
+.icon .art {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.sb-plane { display: block; width: 16px; height: 12px; margin-left: 2px; }
+
+/* ---------- 홈 화면 아이콘 배지 ---------- */
+.app-icon { position: relative; }
+.icon-badge {
+  position: absolute;
+  top: -6px;
+  right: 2px;
+  z-index: 2;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 7px;
+  border: 2px solid #fff;
+  border-radius: 12px;
+  font: bold 14px/20px "Helvetica Neue", Helvetica, sans-serif;
+  text-align: center;
+  color: #fff;
+  background: radial-gradient(circle at 50% 0%, #f88 0%, #e3191b 55%, #b8090b 100%);
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.45);
+}
+.icon-badge[hidden] { display: none; }
+
+/* ---------- iOS 6 배너 알림 ---------- */
+.banner {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 10px;
+  border: 0;
+  border-bottom: 1px solid #000;
+  cursor: pointer;
+  text-align: left;
+  color: #fff;
+  background: linear-gradient(#3c3f45, #15171a);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+  transform: translateY(-100%);
+  transition: transform 0.3s ease;
+  font-family: "Helvetica Neue", Helvetica, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+}
+.banner.is-shown { transform: none; }
+.banner-icon {
+  position: relative;
+  flex: none;
+  width: 22px;
+  height: 22px;
+  overflow: hidden;
+  border-radius: 5px;
+}
+.banner-icon .icon { position: absolute; left: 0; top: 0; transform: scale(0.386); transform-origin: 0 0; box-shadow: none; }
+.banner-text { flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.2; }
+.banner-text b { font-size: 13px; }
+.banner-text span { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 13px; color: #e7e9ec; }

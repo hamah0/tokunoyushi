@@ -1,0 +1,219 @@
+/*
+ * 카메라 앱 (iOS 6 스타일)
+ * 상태 표시줄 없이 화면 전체를 씀: 위 뷰파인더 + 아래 은색 도구 막대(96)
+ */
+.app-camera > .statusbar { display: none; }
+.app-camera { background: #000; }
+
+.cam { position: absolute; inset: 0; background: #000; overflow: hidden; }
+
+.cam-view {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 96px;
+  overflow: hidden;
+  background: #000;
+}
+.cam-video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.cam-video.is-mirror { transform: scaleX(-1); }
+
+.cam-msg {
+  position: absolute;
+  left: 30px;
+  right: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  white-space: pre-line;
+  font-size: 14px;
+  line-height: 1.5;
+  text-align: center;
+  color: #a9adb4;
+}
+.cam-msg[hidden] { display: none; }
+
+.cam-flip {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  width: 60px;
+  height: 34px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 17px;
+  cursor: pointer;
+  background: rgba(0, 0, 0, 0.45);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+.cam-flip svg { display: block; width: 28px; height: 21px; margin: auto; }
+.cam-flip:disabled { cursor: default; }
+
+.cam-flash {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background: #fff;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s;
+}
+.cam-flash.is-on { opacity: 0.6; transition: none; }
+
+/* 조리개: 닫힌 상태에서 열리며 사라짐 */
+.cam-iris {
+  position: absolute;
+  inset: -30%;
+  z-index: 4;
+  pointer-events: none;
+  background:
+    radial-gradient(circle, transparent 0 0, rgba(0, 0, 0, 0) 1%, transparent 1%),
+    repeating-conic-gradient(from 10deg, #3d4148 0deg 25deg, #2a2d32 25deg 30deg, #4a4e56 30deg 60deg);
+  border-radius: 50%;
+  transform: scale(1);
+  opacity: 1;
+  transition: transform 0.35s ease-in, opacity 0.35s ease-in;
+}
+.cam-iris:not(.is-closed) { transform: scale(3) rotate(40deg); opacity: 0; }
+@media (prefers-reduced-motion: reduce) {
+  .cam-iris { transition: opacity 0.2s; }
+  .cam-iris:not(.is-closed) { transform: none; }
+}
+
+/* 아래 은색 도구 막대 */
+.cam-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 96px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  background:
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 3px),
+    linear-gradient(#c9ccd1 0%, #a2a6ad 50%, #8c9098 51%, #9a9ea6 100%);
+  border-top: 1px solid #5c6067;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+.cam-thumb {
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: 2px solid #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  background: #2b2d31 center / cover no-repeat;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.55);
+}
+.cam-thumb:disabled { cursor: default; background-image: none; opacity: 0.55; }
+.cam-bar-gap { width: 48px; }
+
+.cam-shutter {
+  width: 118px;
+  height: 56px;
+  padding: 0;
+  border: 1px solid #4b4f56;
+  border-radius: 28px;
+  cursor: pointer;
+  background: linear-gradient(#fdfdfd 0%, #dcdfe3 50%, #c7cbd1 51%, #e1e4e8 100%);
+  box-shadow: inset 0 1px 0 #fff, 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+.cam-shutter svg { display: block; width: 40px; height: 30px; margin: auto; fill: #4a4e55; }
+.cam-shutter:not(:disabled):active { background: linear-gradient(#c7cbd1, #a9aeb6); }
+.cam-shutter:disabled { cursor: default; }
+
+/* 찍은 사진 보기 */
+.cam-roll { position: absolute; inset: 0; z-index: 6; background: #000; }
+.cam-roll[hidden] { display: none; }
+.cam-roll-img { position: absolute; left: 0; right: 0; top: 0; bottom: 0; width: 100%; height: 100%; object-fit: contain; }
+.cam-roll-top,
+.cam-roll-nav {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.55);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+.cam-roll-top { top: 0; height: 44px; justify-content: center; border-bottom: 1px solid rgba(255, 255, 255, 0.2); }
+.cam-roll-nav { bottom: 0; height: 44px; justify-content: space-around; border-top: 1px solid rgba(255, 255, 255, 0.2); }
+.cam-roll-title { font-size: 17px; font-weight: bold; color: #fff; }
+.cam-roll-done {
+  position: absolute;
+  left: 6px;
+  top: 7px;
+  height: 30px;
+  padding: 0 10px;
+  border: 1px solid rgba(0, 0, 0, 0.6);
+  border-radius: 5px;
+  cursor: pointer;
+  font: bold 13px "Helvetica Neue", Helvetica, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  color: #fff;
+  background: linear-gradient(rgba(90, 90, 90, 0.9), rgba(30, 30, 30, 0.9));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+.cam-roll-nav button {
+  width: 60px;
+  height: 36px;
+  border: 0;
+  cursor: pointer;
+  font-size: 18px;
+  color: #fff;
+  background: none;
+}
+
+/* 격자 (3×3) */
+.cam-grid { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+.cam-grid i { position: absolute; background: rgba(255, 255, 255, 0.35); }
+.cam-grid i:nth-child(1) { left: 33.33%; top: 0; bottom: 0; width: 1px; }
+.cam-grid i:nth-child(2) { left: 66.66%; top: 0; bottom: 0; width: 1px; }
+.cam-grid i:nth-child(3) { top: 33.33%; left: 0; right: 0; height: 1px; }
+.cam-grid i:nth-child(4) { top: 66.66%; left: 0; right: 0; height: 1px; }
+
+/* 위쪽: 플래시 · 옵션 (모양만) */
+.cam-top-btn {
+  position: absolute;
+  top: 12px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 34px;
+  padding: 0 12px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 17px;
+  font: bold 13px "Helvetica Neue", Helvetica, "Apple SD Gothic Neo", sans-serif;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.45);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+.cam-flash-btn { left: 12px; }
+.cam-flash-btn svg { width: 9px; height: 14px; }
+.cam-opt-btn { left: 50%; transform: translateX(-50%); }
+
+/* 아래 오른쪽: 사진/비디오 전환 (모양만) */
+.cam-mode { display: flex; align-items: center; gap: 4px; width: 72px; }
+.cam-mode svg { width: 18px; height: 13px; }
+.cam-mode-track {
+  position: relative;
+  width: 30px;
+  height: 14px;
+  border-radius: 7px;
+  background: linear-gradient(#8a8e95, #b4b8bf);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.45);
+}
+.cam-mode-knob {
+  position: absolute;
+  left: 1px;
+  top: 1px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: linear-gradient(#ffffff, #d5d8dd);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
+}

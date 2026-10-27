@@ -1,0 +1,552 @@
+/*
+ * 전화 앱 + 음성 메모 앱 (iOS 6 스타일)
+ */
+
+/* ---------- 공통: 제목 막대 없는 화면 ---------- */
+.scr-nonav > .navbar { display: none; }
+.scr-nonav > .scr-body { top: 0; }
+
+/* 전화 앱은 검은 상태 표시줄 */
+.app-phone {
+  --sb-top: #2b2b2b; --sb-bottom: #0e0e0e; --sb-line: #000;
+}
+
+/* ---------- 키패드 ---------- */
+.ph-keypad .scr-body {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #000;
+}
+
+.kp-display {
+  flex: none;
+  height: 78px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+  background: linear-gradient(#45484f 0%, #26282d 48%, #1a1b1f 52%, #101114 100%);
+  border-bottom: 1px solid #000;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+.kp-number {
+  max-width: 100%;
+  min-height: 40px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 34px;
+  line-height: 40px;
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.6);
+}
+.kp-number.is-long { font-size: 26px; }
+.kp-match { min-height: 16px; font-size: 13px; color: #9fc0e8; }
+
+.kp-keys {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  background: #8d9096;
+  gap: 1px;
+}
+.kp-key {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  cursor: pointer;
+  color: #1c1c1c;
+  background: linear-gradient(#fbfbfb 0%, #e9eaec 50%, #dcdde0 51%, #e7e8ea 100%);
+  box-shadow: inset 0 1px 0 #fff;
+  touch-action: manipulation;
+}
+.kp-digit {
+  font-size: 34px;
+  line-height: 36px;
+  text-shadow: 0 1px 0 #fff;
+}
+.kp-letters {
+  min-height: 12px;
+  font-size: 10px;
+  font-weight: bold;
+  letter-spacing: 1.5px;
+  color: #666a71;
+  text-shadow: 0 1px 0 #fff;
+}
+.kp-key:active {
+  color: #fff;
+  background: linear-gradient(#5b9af3, #1f63d6);
+  box-shadow: none;
+}
+.kp-key:active .kp-digit,
+.kp-key:active .kp-letters { color: #fff; text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3); }
+.kp-key:focus-visible { outline: 2px solid #1f63d6; outline-offset: -2px; }
+
+.kp-actions {
+  flex: none;
+  height: 62px;
+  display: flex;
+  gap: 1px;
+  background: #000;
+  border-top: 1px solid #000;
+}
+.kp-side {
+  flex: none;
+  width: 78px;
+  border: 0;
+  cursor: pointer;
+  color: #d8dade;
+  background: linear-gradient(#5a5d63 0%, #3c3f44 50%, #2d2f33 51%, #36383c 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+.kp-side svg { display: block; width: 30px; height: 30px; margin: auto; fill: currentColor; }
+.kp-side:disabled { cursor: default; color: #7b7e84; }
+.kp-side:not(:disabled):active { background: linear-gradient(#45484e, #26282b); }
+
+.kp-call {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 0;
+  cursor: pointer;
+  font: bold 21px "Helvetica Neue", Helvetica, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  color: #fff;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.35);
+  background: linear-gradient(#86d974 0%, #4db536 50%, #379d21 51%, #45ad2e 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+.kp-call svg { width: 24px; height: 24px; fill: #fff; filter: drop-shadow(0 -1px 0 rgba(0, 0, 0, 0.3)); }
+.kp-call:active { background: linear-gradient(#5aae47, #2b7d18); }
+
+/* ---------- 통화 화면 ---------- */
+.ph-call .scr-body {
+  background-color: #111;
+  background-size: cover;
+  background-position: center;
+  color: #fff;
+}
+.call-shade { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.38); }
+
+.call-top {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 92px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 14px;
+  text-align: center;
+  background: linear-gradient(rgba(70, 72, 78, 0.78), rgba(20, 21, 24, 0.85));
+  border-bottom: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+}
+.call-name {
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 28px;
+  font-weight: bold;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.6);
+}
+.call-status { margin-top: 4px; font-size: 15px; color: rgba(255, 255, 255, 0.85); }
+
+.call-panel {
+  position: absolute;
+  left: 22px;
+  right: 22px;
+  top: 150px;
+  height: 184px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  overflow: hidden;
+  border-radius: 11px;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+.call-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0;
+  border: 0;
+  border-right: 1px solid rgba(255, 255, 255, 0.25);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  cursor: pointer;
+  font: bold 12px "Helvetica Neue", Helvetica, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  color: #fff;
+  background: none;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5);
+}
+.call-btn:nth-child(3n) { border-right: 0; }
+.call-btn:nth-child(n + 4) { border-bottom: 0; }
+.call-btn svg { width: 34px; height: 34px; fill: currentColor; }
+.call-btn:disabled { cursor: default; color: rgba(255, 255, 255, 0.35); }
+.call-btn.is-on {
+  color: #2a2c31;
+  text-shadow: none;
+  background: linear-gradient(rgba(255, 255, 255, 0.95), rgba(220, 224, 230, 0.95));
+}
+
+.call-end {
+  position: absolute;
+  left: 22px;
+  right: 22px;
+  bottom: 26px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.6);
+  border-radius: 10px;
+  cursor: pointer;
+  font: bold 21px "Helvetica Neue", Helvetica, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  color: #fff;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+  background: linear-gradient(#f0675c 0%, #d8352a 50%, #c4231a 51%, #d02e24 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+.call-end svg { width: 26px; height: 26px; fill: #fff; }
+.call-end:active { background: linear-gradient(#c83a30, #9c160f); }
+
+/* ---------- 목록 (최근 통화, 즐겨찾기) ---------- */
+.ph-row {
+  gap: 6px;
+  padding: 0 8px 0 0;
+  cursor: default;
+}
+.ph-row:active { background: #fff; }
+.ph-row-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 0 8px 12px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+  color: #000;
+}
+.ph-row-main:active { background: linear-gradient(#0a8cf4, #0160e5); color: #fff; }
+.ph-row.is-missed .row-title { color: #d0201a; }
+.ph-row .row-time { flex: none; font-size: 13px; color: #3478c9; }
+.ph-label { color: #8a8f99 !important; }
+
+.disc-btn {
+  flex: none;
+  width: 34px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+.disc-gap { flex: none; width: 34px; }
+
+/* 파란 원 안 화살표 (iOS 6 상세 정보 버튼) */
+.disc {
+  display: block;
+  width: 25px;
+  height: 25px;
+  margin: auto;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: linear-gradient(#5aa2f2 0%, #2c74d8 50%, #1a5fc8 51%, #2d74d6 100%);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.55);
+}
+.disc svg { display: block; width: 13px; height: 13px; margin: 4px auto 0; }
+
+.ph-count {
+  margin: 0;
+  padding: 16px 0;
+  font-size: 15px;
+  text-align: center;
+  color: #8a8f99;
+}
+
+/* 최근 통화: 제목 대신 '전체 / 부재중' 버튼 */
+.seg {
+  position: absolute;
+  left: 50%;
+  top: 7px;
+  display: flex;
+  transform: translateX(-50%);
+  border-radius: 5px;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+.seg button {
+  width: 76px;
+  height: 30px;
+  padding: 0;
+  border: 1px solid rgba(0, 0, 0, 0.45);
+  cursor: pointer;
+  font: bold 13px "Helvetica Neue", Helvetica, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  color: #fff;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+  background: linear-gradient(#8fa1bb, #6a7f9d);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+.seg button:first-child { border-radius: 5px 0 0 5px; border-right-width: 0; }
+.seg button:last-child { border-radius: 0 5px 5px 0; }
+.seg button.is-on {
+  background: linear-gradient(#566a88, #3f5372);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+/* ---------- 연락처 카드 (줄무늬 배경 + 둥근 묶음 표) ---------- */
+.ph-card .scr-body,
+.vm-info .scr-body {
+  background: repeating-linear-gradient(90deg, #c5ccd4 0 5px, #cbd2d8 5px 7px);
+}
+.card-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 12px 6px;
+}
+.card-photo {
+  border: 3px solid #fff;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+.card-name {
+  min-width: 0;
+  font-size: 20px;
+  font-weight: bold;
+  color: #222;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+  overflow-wrap: anywhere;
+}
+
+.grp {
+  margin: 14px 10px 0;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #a9b0b9;
+  border-radius: 9px;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+.grp-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 0;
+  border-bottom: 1px solid #e0e0e0;
+  background: none;
+  font: inherit;
+  text-align: left;
+  color: #000;
+}
+.grp-row:last-child { border-bottom: 0; }
+button.grp-row { cursor: pointer; }
+button.grp-row:active { background: linear-gradient(#0a8cf4, #0160e5); color: #fff; }
+.grp-label {
+  flex: none;
+  width: 72px;
+  font-size: 13px;
+  font-weight: bold;
+  text-align: right;
+  color: #4f6a95;
+}
+.grp-value { min-width: 0; font-size: 15px; font-weight: bold; overflow-wrap: anywhere; }
+.grp-empty { font-weight: normal; color: #9aa0a8; }
+.grp-center { justify-content: center; font-size: 15px; font-weight: bold; color: #4f6a95; }
+
+/* ---------- 음성 메모 ---------- */
+.vm-list .scr-body { bottom: 112px; background: #fff; }
+
+.vm-row {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #e0e0e0;
+}
+.vm-row-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 66px;
+  padding: 0 0 0 4px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+  color: #000;
+}
+.vm-play {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.vm-play svg { width: 14px; height: 14px; fill: #2d6fd2; }
+.vm-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.vm-time {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 20px;
+  font-weight: bold;
+}
+.vm-date { font-size: 14px; color: #8a8f99; font-variant-numeric: tabular-nums; }
+.vm-dur {
+  flex: none;
+  padding-left: 6px;
+  font-size: 15px;
+  color: #3478c9;
+  font-variant-numeric: tabular-nums;
+}
+.vm-row.is-selected .vm-row-main { background: #eef4fc; }
+
+/* 아래 검은 재생 패널 */
+.vm-panel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 112px;
+  z-index: 3;
+  padding: 12px 14px 0;
+  background: linear-gradient(#4a4a4c 0%, #1c1c1d 30%, #050505 100%);
+  border-top: 1px solid #000;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+.vm-scrub {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 26px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+}
+.vm-scrub span { flex: none; min-width: 38px; }
+.vm-scrub span:last-child { text-align: right; }
+.vm-note {
+  height: 26px;
+  font-size: 13px;
+  line-height: 26px;
+  text-align: center;
+  color: #a7abb2;
+}
+
+.vm-range {
+  flex: 1;
+  min-width: 0;
+  height: 22px;
+  margin: 0;
+  background: none;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  --p: 0%;
+}
+.vm-range::-webkit-slider-runnable-track {
+  height: 9px;
+  border-radius: 5px;
+  background: linear-gradient(90deg, #cfe0f7 var(--p), #fafafa var(--p));
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.55);
+}
+.vm-range::-moz-range-track {
+  height: 9px;
+  border-radius: 5px;
+  background: linear-gradient(90deg, #cfe0f7 var(--p), #fafafa var(--p));
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.55);
+}
+.vm-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  margin-top: -6.5px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 35%, #fff, #d4d6da);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+}
+.vm-range::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 35%, #fff, #d4d6da);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+}
+.vm-range:disabled { cursor: default; opacity: 0.6; }
+
+.vm-btns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 12px;
+}
+.vm-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 46px;
+  border: 1px solid #000;
+  border-radius: 9px;
+  cursor: pointer;
+  font: bold 18px "Helvetica Neue", Helvetica, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  color: #fff;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+.vm-btn svg { width: 22px; height: 22px; fill: #fff; }
+.vm-share  { background: linear-gradient(#5d93df 0%, #2c66c2 50%, #1d55b0 51%, #2861bb 100%); }
+.vm-delete { background: linear-gradient(#e05a52 0%, #c02a21 50%, #a81b13 51%, #b8241b 100%); }
+.vm-btn:disabled { cursor: default; opacity: 0.4; }
+.vm-btn:not(:disabled):active { filter: brightness(0.8); }
+
+.vm-info .grp-label { width: 64px; }
+
+/* 통화 중 상대 대사 (자막) */
+.call-sub {
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  top: 372px;
+  z-index: 2;
+  padding: 9px 12px;
+  border-radius: 10px;
+  font-size: 15px;
+  line-height: 1.45;
+  text-align: center;
+  word-break: keep-all;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.62);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 0.25s, transform 0.25s;
+  pointer-events: none;
+}
+.call-sub.is-on { opacity: 1; transform: none; }

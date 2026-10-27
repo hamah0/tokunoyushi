@@ -1,0 +1,107 @@
+/* =========================================================
+ * 홈 화면 페이지 넘기기 + 시간표 페이지
+ * ========================================================= */
+.home-pages {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 320px;
+  bottom: 118px;
+  overflow: hidden;
+  touch-action: pan-y;
+}
+.home-track {
+  display: flex;
+  width: 640px;
+  height: 100%;
+  transition: transform 0.32s cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+.home-page {
+  position: relative;
+  flex: none;
+  width: 320px;
+  height: 100%;
+}
+
+/* 시간표 */
+.timetable {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  top: 28px;
+  bottom: 6px;
+}
+.tt-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+  font-family: "Helvetica Neue", Helvetica, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+}
+.tt-head {
+  flex: none;
+  height: 30px;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 30px;
+  text-align: center;
+  color: #333;
+  border-bottom: 1px solid #e3e3e3;
+}
+.tt-days {
+  flex: none;
+  display: grid;
+  grid-template-columns: 22px repeat(5, 1fr);
+  height: 20px;
+  font-size: 11px;
+  line-height: 20px;
+  text-align: center;
+  color: #777;
+  border-bottom: 1px solid #e3e3e3;
+}
+.tt-days span + span { border-left: 1px solid #ececec; }
+.tt-grid {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 22px repeat(5, 1fr);
+  background:
+    repeating-linear-gradient(#0000 0 calc(100% / var(--rows) - 1px), #ececec calc(100% / var(--rows) - 1px) calc(100% / var(--rows)));
+}
+.tt-hours {
+  display: grid;
+  grid-template-rows: repeat(var(--rows), 1fr);
+  font-size: 10px;
+  text-align: center;
+  color: #888;
+}
+.tt-hours span { padding-top: 2px; }
+.tt-col { position: relative; border-left: 1px solid #ececec; }
+.tt-class {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.9);
+  overflow: hidden;
+  padding: 3px 3px 0;
+  color: #fff;
+  font-size: 10px;
+  line-height: 1.25;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+.tt-class b { display: block; font-weight: bold; }
+.tt-class span { display: block; opacity: 0.95; }
+.tt-extra {
+  flex: none;
+  padding: 5px 8px;
+  font-size: 10.5px;
+  color: #666;
+  border-top: 1px solid #e3e3e3;
+  background: #f7f7f7;
+}
+.tt-extra span { display: block; }
+.tt-extra b { color: #444; }

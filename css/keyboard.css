@@ -1,0 +1,183 @@
+/*
+ * iOS 6 한글 키보드 (화면 320 × 216)
+ */
+.kb {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 216px;
+  z-index: 8;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 11px 3px 5px;
+  background: linear-gradient(#959cab, #6d7483);
+  border-top: 1px solid #484e59;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  transform: translateY(100%);
+  visibility: hidden;
+  transition: transform 0.25s ease-out, visibility 0s linear 0.25s;
+}
+.kb.is-open {
+  transform: none;
+  visibility: visible;
+  transition: transform 0.25s ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .kb, .kb.is-open { transition: none; }
+}
+
+.kb-row {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  height: 39px;
+}
+.kb-row3 { justify-content: space-between; }
+.kb-mid { display: flex; gap: 6px; }
+.kb-spacer { width: 36px; }
+
+.kb-key {
+  flex: none;
+  width: 26px;
+  height: 39px;
+  padding: 0;
+  border: 0;
+  border-radius: 5px;
+  cursor: pointer;
+  font: 22px/39px "Helvetica Neue", Helvetica, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  color: #111;
+  background: linear-gradient(#fefefe, #e1e2e6);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.55), inset 0 1px 0 #fff;
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.kb-key:active,
+.kb-key.is-press { background: linear-gradient(#e4e5e9, #c3c6cc); }
+.kb-key:focus-visible { outline: 2px solid #1d63d8; outline-offset: 1px; }
+
+/* 기능 키 (Shift, 지우기, 123, 지구본) */
+.kb-fn {
+  width: 36px;
+  color: #fff;
+  background: linear-gradient(#a7adb9, #858c9a);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+.kb-fn.is-press,
+.kb-fn:active { background: linear-gradient(#8d94a1, #6f7684); }
+.kb-fn svg { display: block; width: 20px; height: 20px; margin: auto; }
+
+.kb-shift { color: #3d434e; background: linear-gradient(#ccd0d7, #a8aeb9); }
+.kb-shift.is-on { color: #1d63d8; background: linear-gradient(#fefefe, #e1e2e6); }
+.kb-back svg { width: 25px; height: 18px; }
+.kb-123 { width: 38px; font-size: 15px; font-weight: bold; }
+
+.kb-row4 { justify-content: flex-start; }
+.kb-space {
+  flex: 1;
+  width: auto;
+  font-size: 15px;
+  color: #6f7480;
+  background: linear-gradient(#f4f4f6, #d8d9dd);
+}
+.kb-return {
+  width: 74px;
+  font-size: 15px;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);
+  background: linear-gradient(#5297f6, #1d63d8);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+.kb-return:active { background: linear-gradient(#3b80e4, #164fb2); }
+
+/* 숫자·기호 자판의 셋째 줄은 칸이 넓음 */
+.kb-num .kb-mid .kb-key { width: 41px; }
+
+/* 키보드가 열리면 입력창과 내용이 위로 올라감 */
+.chat-input,
+.chat-log,
+.detail-scroll { transition: bottom 0.25s ease-out; }
+.scr-body.kb-open .chat-input { bottom: 216px; }
+.scr-body.kb-open .chat-log,
+.scr-body.kb-open .detail-scroll { bottom: 260px; }
+.scr-body.kb-open .room-tray { bottom: 260px; }
+.scr-body.kb-open .emo-picker { bottom: 266px; }
+
+/* ---------- 이모티콘 자판 ---------- */
+.kb.kb-emoji {
+  gap: 0;
+  padding: 0;
+  background: linear-gradient(#e9ebee, #cfd3d9);
+}
+.kb-emo-label {
+  flex: none;
+  height: 18px;
+  font-size: 11px;
+  font-weight: bold;
+  line-height: 18px;
+  text-align: center;
+  color: #6c727c;
+  text-shadow: 0 1px 0 #fff;
+}
+.kb-emo-grid {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: repeat(3, 1fr);
+  grid-auto-flow: column;
+  grid-auto-columns: calc(320px / 7);
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior: contain;
+}
+.kb-emo {
+  scroll-snap-align: start;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  cursor: pointer;
+  background: none;
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+  font-size: 28px;
+  line-height: 1;
+}
+.kb-emo:active { background: rgba(0, 0, 0, 0.12); }
+.kb-emo-empty {
+  grid-row: 1 / -1;
+  width: 320px;
+  margin: 0;
+  align-self: center;
+  font-size: 13px;
+  text-align: center;
+  color: #7d838c;
+}
+
+.kb-emo-bar {
+  flex: none;
+  height: 42px;
+  display: flex;
+  background: linear-gradient(#5d636e, #34383f);
+  border-top: 1px solid #262a30;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+.kb-key.kb-emo-tab {
+  flex: 1;
+  width: auto;
+  height: 42px;
+  border-radius: 0;
+  border-right: 1px solid rgba(0, 0, 0, 0.35);
+  color: #d5d9df;
+  background: none;
+  box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.08);
+}
+.kb-key.kb-emo-tab svg { display: block; width: 22px; height: 22px; margin: auto; }
+.kb-key.kb-emo-tab.is-on {
+  color: #fff;
+  background: linear-gradient(#4f93f5, #1d63d8);
+}
+.kb-key.kb-emo-tab:active { background: rgba(255, 255, 255, 0.12); }
+.kb-emo-back svg { width: 24px; height: 18px; }

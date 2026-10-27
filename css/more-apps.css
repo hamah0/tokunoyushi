@@ -1,0 +1,806 @@
+/*
+ * 기본 앱들 (iOS 6 스타일)
+ * 계산기 · 시계 · 캘린더 · 메모 · 미리 알림 · 사진 · 음악 · Mail · 인터넷 · 지도 · 날씨 · 설정
+ */
+
+/* 줄무늬 배경 (설정, Mail 등) */
+.pin { background: repeating-linear-gradient(90deg, #c5ccd4 0 5px, #cbd2d8 5px 7px); }
+.pin .grp { margin: 12px 10px 0; }
+.pin .grp:last-child { margin-bottom: 16px; }
+.pin-head { margin: 18px 20px 0; color: #4c566c; text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8); }
+.pin .grp-row { gap: 10px; }
+
+/* 화면 밝기 (설정 > 밝기) */
+.dim {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  background: #000;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* =========================================================
+ * 계산기
+ * ========================================================= */
+.app-calc { --sb-top: #2b2b2b; --sb-bottom: #111; --sb-line: #000; background: #1e1f22; }
+.calc {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 20px;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(#3a3c40, #1a1b1e);
+}
+.calc-display {
+  position: relative;
+  flex: none;
+  height: 118px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 0 18px 10px;
+  background: linear-gradient(#4a4d52, #2a2c30);
+  border-bottom: 1px solid #000;
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.08);
+}
+.calc-value {
+  font-size: 64px;
+  font-weight: 300;
+  line-height: 1;
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.6);
+  white-space: nowrap;
+}
+.calc-value.is-small { font-size: 44px; }
+.calc-m { position: absolute; left: 14px; top: 10px; font-size: 14px; font-weight: bold; color: #c9ccd1; }
+.calc-m[hidden] { display: none; }
+.calc-keys {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+  gap: 6px;
+  padding: 8px;
+}
+.calc-key {
+  border: 1px solid #0d0d0f;
+  border-radius: 6px;
+  cursor: pointer;
+  font: 28px "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #fff;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.6);
+  background: linear-gradient(#7a7e85 0%, #5c6067 50%, #4f5359 51%, #5e6168 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+.calc-mem, .calc-fn { font-size: 20px; background: linear-gradient(#55585e 0%, #3c3f44 50%, #33363a 51%, #3d4045 100%); }
+.calc-op { background: linear-gradient(#55585e 0%, #3c3f44 50%, #33363a 51%, #3d4045 100%); }
+.calc-op.is-on { box-shadow: inset 0 0 0 2px #fff; }
+.calc-eq {
+  grid-row: span 2;
+  background: linear-gradient(#f9b25b 0%, #ee8a1d 50%, #e2790c 51%, #ee8a1d 100%);
+}
+.calc-zero { grid-column: span 2; }
+.calc-key:active { filter: brightness(0.75); }
+
+/* =========================================================
+ * 시계
+ * ========================================================= */
+.app-clock {
+  --nav-1: #5b5e64; --nav-2: #2f3236; --nav-3: #26282c; --nav-4: #141517; --nav-line: #000;
+  --sb-top: #2b2b2b; --sb-bottom: #111; --sb-line: #000;
+}
+.clk-dark .scr-body { background: linear-gradient(#2b2d31, #0d0e10); }
+.wc-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.6);
+}
+.wc-face .wc-dial { fill: #fafafa; stroke: #9a9da3; stroke-width: 1; }
+.wc-face .wc-ticks, .wc-face .wc-hand { fill: #222; }
+.wc-face.is-night .wc-dial { fill: #121315; stroke: #55585e; }
+.wc-face.is-night .wc-ticks, .wc-face.is-night .wc-hand { fill: #fff; }
+.wc-text { display: flex; flex-direction: column; gap: 3px; }
+.wc-city { font-size: 22px; font-weight: bold; color: #fff; }
+.wc-sub { font-size: 13px; color: #9a9da3; }
+
+.al-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-bottom: 1px solid #e0e0e0;
+}
+.al-text { flex: 1; display: flex; flex-direction: column; }
+.al-time { font-size: 28px; font-weight: bold; }
+.al-time small { font-size: 16px; }
+.al-label { font-size: 13px; color: #7a7f88; }
+.al-row.is-off .al-time { color: #8a8f99; }
+
+.sw-screen, .tm-screen { background: #fff; display: flex; flex-direction: column; }
+.sw-top {
+  flex: none;
+  padding: 12px 16px 14px;
+  text-align: right;
+  background: linear-gradient(#f4f5f7, #d5d9df);
+  border-bottom: 1px solid #a9b0b9;
+}
+.sw-lap { min-height: 20px; font-size: 18px; color: #7a7f88; font-variant-numeric: tabular-nums; }
+.sw-main { font-size: 58px; font-weight: 300; line-height: 1.05; font-variant-numeric: tabular-nums; }
+.sw-btns { display: flex; gap: 14px; padding: 14px; background: linear-gradient(#dfe3e8, #c4cad2); border-bottom: 1px solid #a9b0b9; }
+.big-btn {
+  flex: 1;
+  height: 48px;
+  border: 1px solid rgba(0, 0, 0, 0.45);
+  border-radius: 9px;
+  cursor: pointer;
+  font: bold 18px "Helvetica Neue", Helvetica, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  color: #333;
+  text-shadow: 0 1px 0 #fff;
+  background: linear-gradient(#fdfdfd 0%, #e2e4e8 50%, #d3d6db 51%, #e3e5e9 100%);
+  box-shadow: inset 0 1px 0 #fff;
+}
+.big-btn.is-green { color: #fff; text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.35); background: linear-gradient(#86d974 0%, #4db536 50%, #379d21 51%, #45ad2e 100%); }
+.big-btn.is-red { color: #fff; text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.35); background: linear-gradient(#f0675c 0%, #d8352a 50%, #c4231a 51%, #d02e24 100%); }
+.big-btn:disabled { cursor: default; opacity: 0.45; }
+.big-btn:not(:disabled):active { filter: brightness(0.85); }
+.sw-laps { flex: 1; overflow-y: auto; }
+.sw-laprow {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 16px;
+  border-bottom: 1px solid #e3e3e3;
+  font-size: 16px;
+  font-variant-numeric: tabular-nums;
+}
+.tm-picker {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  margin: 26px 16px 10px;
+  padding: 16px;
+  border-radius: 10px;
+  background: linear-gradient(#3a3c41, #1b1c1f);
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.6);
+}
+.tm-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 104px;
+  padding: 6px 0;
+  border-radius: 6px;
+  background: linear-gradient(#cfd2d7, #fdfdfd 30%, #fdfdfd 70%, #cfd2d7);
+}
+.tm-col span { font-size: 34px; font-weight: bold; font-variant-numeric: tabular-nums; }
+.tm-col small { font-size: 14px; margin-left: 4px; }
+.tm-col button { width: 60px; height: 26px; border: 0; background: none; cursor: pointer; color: #6c727c; font-size: 14px; }
+.tm-left { padding: 40px 0 26px; font-size: 64px; font-weight: 300; text-align: center; font-variant-numeric: tabular-nums; }
+.tm-done { margin: 0 16px; font-size: 15px; font-weight: bold; text-align: center; color: #d0201a; }
+.tm-start { background: none; border: 0; }
+
+/* =========================================================
+ * 캘린더
+ * ========================================================= */
+.cal .scr-body { display: flex; flex-direction: column; overflow: hidden; background: #fff; }
+.cal-head {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 40px;
+  padding: 0 6px;
+  background: linear-gradient(#f4f5f7, #cfd4dc);
+}
+.cal-title { font-size: 20px; font-weight: bold; color: #39424f; text-shadow: 0 1px 0 #fff; }
+.cal-nav { width: 44px; height: 34px; border: 0; background: none; cursor: pointer; color: #4c566c; font-size: 14px; }
+.cal-week {
+  flex: none;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  padding-bottom: 2px;
+  background: linear-gradient(#cfd4dc, #c3c9d2);
+  border-bottom: 1px solid #959ba5;
+}
+.cal-week span { font-size: 10px; font-weight: bold; text-align: center; color: #4c566c; }
+.cal-grid { flex: none; display: grid; grid-template-columns: repeat(7, 1fr); background: #a9aeb7; gap: 1px; }
+.cal-cell {
+  position: relative;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  cursor: pointer;
+  font: bold 20px "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #2f3540;
+  text-shadow: 0 1px 0 #fff;
+  background: linear-gradient(#f4f5f7, #e1e4e8);
+}
+.cal-cell.is-other { color: #9aa0a8; background: linear-gradient(#e2e5e9, #d2d6db); }
+.cal-cell.is-blank { cursor: default; background: linear-gradient(#e2e5e9, #d2d6db); }
+.cal-nav:disabled { opacity: 0.3; cursor: default; }
+.cal-cell.is-today { color: #fff; text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4); background: linear-gradient(#7aa1d6, #4a76b8); }
+.cal-cell.is-sel { box-shadow: inset 0 0 0 2px #2c5b9e; }
+.cal-dot { position: absolute; left: 50%; bottom: 4px; width: 5px; height: 5px; margin-left: -2.5px; border-radius: 50%; background: #4c566c; }
+.cal-cell.is-today .cal-dot { background: #fff; }
+.cal-list { flex: 1; min-height: 0; overflow-y: auto; }
+.cal-list-head { padding: 6px 12px; font-size: 13px; font-weight: bold; color: #fff; background: linear-gradient(#9fadb8, #b9c3ca); }
+.cal-ev { display: flex; gap: 12px; padding: 10px 12px; border-bottom: 1px solid #e3e3e3; }
+.cal-ev-time { flex: none; width: 70px; font-size: 13px; color: #7a7f88; }
+.cal-ev-title { font-size: 15px; font-weight: bold; overflow-wrap: anywhere; }
+.cal-none { margin: 16px; font-size: 14px; text-align: center; color: #9aa0a8; }
+.cal-bar {
+  flex: none;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  background: linear-gradient(#b0bccd, #6d84a2);
+  border-top: 1px solid #2d3642;
+}
+.cal-today {
+  height: 30px;
+  padding: 0 12px;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  border-radius: 5px;
+  cursor: pointer;
+  font: bold 13px "Helvetica Neue", Helvetica, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  color: #fff;
+  background: linear-gradient(#7b8fac, #4f6588);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+/* =========================================================
+ * 메모
+ * ========================================================= */
+.app-notes {
+  --nav-1: #b88a5a; --nav-2: #8c5e33; --nav-3: #7f5229; --nav-4: #67401c; --nav-line: #3d2410;
+  --sb-top: #8c5e33; --sb-bottom: #6d4622; --sb-line: #4b2d14;
+  --btn-1: #8c5e33; --btn-2: #5a3818;
+}
+.nt-list .scr-body,
+.nt-page .scr-body {
+  background-color: #fbf3b2;
+  background-image: repeating-linear-gradient(transparent 0 31px, #d9cd8c 31px 32px);
+}
+.nt-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  height: 32px;
+  padding: 0 12px 0 16px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font: 15px "Marker Felt", "Noteworthy", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  text-align: left;
+  color: #3a2a12;
+}
+.nt-title { flex: 1; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.nt-time { flex: none; font-size: 12px; color: #9a7d4e; }
+.nt-empty { margin: 50px 0; font: 18px "Marker Felt", "Noteworthy", sans-serif; text-align: center; color: #a58d5c; }
+.nt-page .scr-body { overflow: hidden; }
+.nt-paper { position: absolute; left: 0; right: 0; top: 0; bottom: 44px; display: flex; flex-direction: column; transition: bottom 0.25s; }
+.scr-body.kb-open .nt-paper { bottom: 216px; }
+.nt-date { display: flex; justify-content: space-between; height: 32px; padding: 0 16px; align-items: center; font-size: 12px; color: #9a7d4e; }
+.nt-text {
+  flex: 1;
+  width: 100%;
+  padding: 0 16px 10px;
+  border: 0;
+  outline: none;
+  resize: none;
+  background: transparent;
+  font: 15px/32px "Marker Felt", "Noteworthy", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  color: #3a2a12;
+}
+.nt-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(#b88a5a, #67401c);
+  border-top: 1px solid #3d2410;
+}
+.nt-del { width: 44px; height: 36px; border: 0; background: none; cursor: pointer; }
+.nt-del svg { width: 22px; height: 22px; fill: #fff; filter: drop-shadow(0 -1px 0 rgba(0, 0, 0, 0.4)); }
+
+/* =========================================================
+ * 미리 알림
+ * ========================================================= */
+.rm .scr-body { background: #f2efe6; overflow: hidden; }
+.rm-paper {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  background-color: #fffefa;
+  background-image: repeating-linear-gradient(transparent 0 43px, #e7e2d3 43px 44px);
+}
+.rm-row, .rm-add { display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 14px; }
+.rm-check {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 1.5px solid #9aa0a8;
+  border-radius: 50%;
+  cursor: pointer;
+  background: #fff;
+}
+.rm-row.is-done .rm-check { border-color: #6c7179; background: radial-gradient(circle, #6c7179 0 5px, #fff 6px); }
+.rm-text { min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 17px; }
+.rm-row.is-done .rm-text { color: #9aa0a8; }
+.rm-plus { width: 22px; text-align: center; font-size: 22px; color: #9aa0a8; }
+.rm-field { flex: 1; min-width: 0; height: 36px; border: 0; outline: none; background: none; font: 17px "Helvetica Neue", Helvetica, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; }
+.scr-body.kb-open .rm-paper { bottom: 216px; }
+
+/* =========================================================
+ * 사진
+ * ========================================================= */
+.al-album { gap: 12px; }
+.al-cover {
+  flex: none;
+  width: 56px;
+  height: 56px;
+  background: #dfe2e7 center / cover no-repeat;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+.ph-roll .scr-body { background: #fff; }
+.pr-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; padding: 4px; }
+.pr-thumb { position: relative; aspect-ratio: 1 / 1; max-width: 100%; padding: 0; border: 0; cursor: pointer; background: #ddd center / cover no-repeat; }
+.pr-count { margin: 12px 0; font-size: 15px; text-align: center; color: #7a7f88; }
+.list-empty small { font-size: 12px; }
+.ph-viewer .scr-body { background: #000; }
+.pv-img { position: absolute; inset: 0 0 44px; width: 100%; height: calc(100% - 44px); object-fit: contain; }
+.pv-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 44px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: linear-gradient(rgba(60, 60, 60, 0.9), rgba(10, 10, 10, 0.9));
+}
+.pv-bar button { width: 60px; height: 36px; border: 0; background: none; color: #fff; font-size: 18px; cursor: pointer; }
+.pv-bar button:disabled { opacity: 0.3; cursor: default; }
+
+/* =========================================================
+ * 음악
+ * ========================================================= */
+.app-music {
+  --nav-1: #5b5e64; --nav-2: #2f3236; --nav-3: #26282c; --nav-4: #141517; --nav-line: #000;
+  --sb-top: #2b2b2b; --sb-bottom: #111; --sb-line: #000;
+  --btn-1: #4a4d52; --btn-2: #1c1d20;
+}
+.mu-player .scr-body { background: #000; color: #fff; display: flex; flex-direction: column; overflow: hidden; }
+.mu-info {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  padding: 6px 10px;
+  font-size: 12px;
+  background: linear-gradient(#3a3c41, #16171a);
+  border-bottom: 1px solid #000;
+}
+.mu-title { font-size: 13px; font-weight: bold; }
+.mu-artist, .mu-album { color: #a9adb3; }
+.mu-art {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #3b3f46, #121315);
+}
+.mu-art svg { width: 120px; height: 120px; fill: rgba(255, 255, 255, 0.18); }
+.mu-ctrl { flex: none; padding: 10px 14px 16px; background: linear-gradient(#3a3c41, #0d0e10); }
+.mu-btns { display: flex; justify-content: space-around; margin-top: 10px; }
+.mu-btns button { width: 60px; height: 50px; border: 0; background: none; cursor: pointer; }
+.mu-btns svg { width: 34px; height: 34px; fill: #fff; filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.6)); }
+.mu-btns button:disabled { opacity: 0.3; cursor: default; }
+
+/* =========================================================
+ * Mail
+ * ========================================================= */
+.ml-count {
+  flex: none;
+  min-width: 26px;
+  padding: 1px 8px;
+  border-radius: 11px;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  color: #fff;
+  background: #8c99ab;
+}
+.ml-subj { display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 14px; font-weight: bold; color: #222; }
+.ml-msg .scr-body { background: #fff; }
+.ml-head { padding: 10px 12px; border-bottom: 1px solid #ddd; font-size: 14px; }
+.ml-k { color: #8a8f99; }
+.ml-from { font-weight: bold; color: #2a6fd3; }
+.ml-subject { margin-top: 8px; font-size: 17px; font-weight: bold; overflow-wrap: anywhere; }
+.ml-date { margin-top: 2px; font-size: 12px; color: #8a8f99; }
+.ml-body { padding: 14px 14px; font-size: 14px; line-height: 1.6; white-space: pre-wrap; word-break: keep-all; overflow-wrap: anywhere; }
+
+/* =========================================================
+ * 인터넷 (Safari)
+ * ========================================================= */
+.web { position: absolute; left: 0; right: 0; top: 20px; bottom: 0; overflow: hidden; background: #fff; }
+.web-top {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 62px;
+  padding: 2px 8px 0;
+  background: linear-gradient(#e6e9ed, #b5bcc6);
+  border-bottom: 1px solid #7f8792;
+}
+.web-title {
+  height: 18px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 13px;
+  font-weight: bold;
+  text-align: center;
+  color: #4c566c;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+.web-addr {
+  display: flex;
+  align-items: center;
+  height: 32px;
+  padding: 0 4px 0 10px;
+  border: 1px solid #8f96a0;
+  border-radius: 6px;
+  background: #fff;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+.web-url { flex: 1; min-width: 0; height: 28px; border: 0; outline: none; background: none; font: 15px "Helvetica Neue", Helvetica, Arial, sans-serif; color: #222; }
+.web-go { width: 28px; height: 28px; padding: 0; border: 0; background: none; cursor: pointer; }
+.web-go svg { width: 16px; height: 16px; fill: #6c7179; }
+.web-page { position: absolute; left: 0; right: 0; top: 63px; bottom: 44px; overflow-y: auto; overflow-x: hidden; transition: bottom 0.25s; }
+.web.kb-open .web-page { bottom: 216px; }
+.web-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 44px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: linear-gradient(#b0bccd 0%, #8a9cb5 50%, #7f91ab 51%, #6d84a2 100%);
+  border-top: 1px solid #2d3642;
+}
+.web-bar button { width: 44px; height: 38px; border: 0; background: none; cursor: pointer; color: #fff; }
+.web-bar svg { width: 22px; height: 22px; fill: #fff; filter: drop-shadow(0 -1px 0 rgba(0, 0, 0, 0.4)); }
+.web-bar button:disabled { opacity: 0.35; cursor: default; }
+.web-books { padding: 0 0 20px; }
+.web-books h2 { margin: 0; padding: 10px 12px; font-size: 15px; color: #fff; background: linear-gradient(#9fadb8, #b9c3ca); }
+.web-book { display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; border-bottom: 1px solid #e3e3e3; text-decoration: none; color: #222; }
+.web-book b { font-size: 16px; }
+.web-book span { font-size: 12px; color: #8a8f99; }
+.web-doc { padding: 12px 14px 24px; font-size: 15px; line-height: 1.6; color: #222; overflow-wrap: anywhere; }
+.web-doc h1 { font-size: 22px; line-height: 1.3; margin: 4px 0 10px; }
+.web-doc a { color: #1a55b8; }
+.web-doc img { max-width: 100%; }
+.web-err { padding: 70px 26px 0; text-align: center; color: #4c566c; }
+.web-err h2 { margin: 0 0 8px; font-size: 18px; }
+.web-err p { margin: 0; font-size: 14px; line-height: 1.5; }
+
+/* =========================================================
+ * 지도
+ * ========================================================= */
+.maps { position: absolute; left: 0; right: 0; top: 20px; bottom: 0; overflow: hidden; background: #ede9e0; }
+.map-top {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 2;
+  height: 44px;
+  padding: 6px 8px;
+  background: linear-gradient(#e6e9ed, #b5bcc6);
+  border-bottom: 1px solid #7f8792;
+}
+.map-search {
+  width: 100%;
+  height: 31px;
+  padding: 0 14px;
+  border: 1px solid #8f96a0;
+  border-radius: 16px;
+  outline: none;
+  background: #fff;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+  font: 14px "Helvetica Neue", Helvetica, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+}
+.map-view { position: absolute; left: 0; right: 0; top: 44px; bottom: 44px; overflow: hidden; touch-action: none; cursor: grab; }
+.map-view:active { cursor: grabbing; }
+.map-pan { position: absolute; left: 0; top: 0; width: 900px; height: 900px; will-change: transform; }
+.map-pan.is-moving { transition: transform 0.4s ease-out; }
+.map-svg { display: block; }
+.map-me {
+  position: absolute;
+  left: 441px;
+  top: 321px;
+  width: 18px;
+  height: 18px;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  background: #2a7ae2;
+  box-shadow: 0 0 0 10px rgba(42, 122, 226, 0.2), 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+.map-me[hidden] { display: none; }
+.map-banner {
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  top: 12px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  text-align: center;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.7);
+}
+.map-banner[hidden] { display: none; }
+.map-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 8px;
+  background: linear-gradient(#b0bccd 0%, #8a9cb5 50%, #7f91ab 51%, #6d84a2 100%);
+  border-top: 1px solid #2d3642;
+}
+.map-loc {
+  width: 38px;
+  height: 30px;
+  border: 1px solid rgba(0, 0, 0, 0.45);
+  border-radius: 5px;
+  cursor: pointer;
+  background: linear-gradient(#7b8fac, #4f6588);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+.map-loc svg { display: block; width: 18px; height: 18px; margin: auto; fill: #fff; }
+.map-hint { font-size: 11px; color: rgba(255, 255, 255, 0.85); text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3); }
+.maps.kb-open .map-view { bottom: 216px; }
+
+/* =========================================================
+ * 날씨
+ * ========================================================= */
+.app-weather { background: #111; }
+.wx {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 20px;
+  bottom: 0;
+  padding: 16px 12px 0;
+  background: repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.02) 0 1px, transparent 1px 3px), #1d1f22;
+}
+.wx-card {
+  overflow: hidden;
+  border-radius: 12px;
+  color: #fff;
+  background: linear-gradient(#6fb3ee 0%, #3a82d6 55%, #2c6ec2 100%);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+.wx-top { display: flex; justify-content: space-between; align-items: flex-start; padding: 16px 16px 0; }
+.wx-city { font-size: 26px; font-weight: bold; }
+.wx-hilo { margin-top: 2px; font-size: 13px; }
+.wx-now { display: flex; align-items: center; gap: 4px; }
+.wx-temp { font-size: 56px; font-weight: 200; line-height: 1; }
+.wx-cond { padding: 4px 16px 14px; font-size: 14px; }
+.wx-days {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  padding: 12px 6px;
+  background: rgba(0, 0, 0, 0.18);
+  border-top: 1px solid rgba(255, 255, 255, 0.25);
+}
+.wx-day { display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 13px; }
+.wx-day b { font-size: 14px; }
+.wx-day small { font-size: 12px; opacity: 0.8; }
+.wx-dots { display: flex; justify-content: center; gap: 8px; margin-top: 14px; }
+.wx-dots span { width: 7px; height: 7px; border-radius: 50%; background: rgba(255, 255, 255, 0.35); }
+.wx-dots .is-on { background: #fff; }
+
+/* =========================================================
+ * 설정
+ * ========================================================= */
+.set-icon {
+  flex: none;
+  width: 29px;
+  height: 29px;
+  border-radius: 6px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+.set-icon svg {
+  position: absolute;
+  inset: 4px;
+  width: 21px;
+  height: 21px;
+  filter: drop-shadow(0 -1px 0 rgba(0, 0, 0, 0.25));
+}
+.set-icon::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; top: 0;
+  height: 50%;
+  background: linear-gradient(rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.08));
+  border-radius: 6px 6px 40% 40% / 6px 6px 3px 3px;
+}
+.set-bright { gap: 10px; }
+.set-bright .vm-range { flex: 1; }
+.set-bright .vm-range::-webkit-slider-runnable-track { background: linear-gradient(90deg, #4a8fe6 var(--p), #fafafa var(--p)); }
+.set-bright .vm-range::-moz-range-track { background: linear-gradient(90deg, #4a8fe6 var(--p), #fafafa var(--p)); }
+.set-sun { font-size: 14px; color: #6c7179; }
+.set-sun.big { font-size: 22px; }
+.set-walls { justify-content: center; gap: 16px; padding: 12px; }
+.set-wall {
+  width: 80px;
+  height: 142px;
+  border: 2px solid #fff;
+  background: #333 center / cover no-repeat;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.45);
+}
+
+/* ---------- Safari: 주소칸 + 검색칸, 최근 검색, 방문 기록 ---------- */
+.web-fields { display: flex; gap: 6px; }
+.web-fields .web-addr { flex: 1; min-width: 0; transition: flex 0.2s; }
+.web-search {
+  flex: none;
+  width: 96px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid #8f96a0;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+  color: #8a8f99;
+  transition: width 0.2s;
+}
+.web-search svg { flex: none; width: 13px; height: 13px; }
+.web-q { flex: 1; min-width: 0; height: 28px; border: 0; outline: none; background: none; font: 14px "Helvetica Neue", Helvetica, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; color: #222; }
+.web.is-searching .web-addr { display: none; }
+.web.is-searching .web-search { flex: 1; width: auto; }
+
+.web-recent {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 63px;
+  bottom: 44px;
+  z-index: 3;
+  overflow-y: auto;
+  background: #fff;
+}
+.web-recent[hidden] { display: none; }
+.web.kb-open .web-recent { bottom: 216px; }
+.web-recent-head,
+.web-books h2 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.web-recent-head {
+  padding: 5px 12px;
+  font-size: 13px;
+  font-weight: bold;
+  color: #fff;
+  background: linear-gradient(#9fadb8, #b9c3ca);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
+}
+.web-clear {
+  height: 24px;
+  padding: 0 10px;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  cursor: pointer;
+  font: bold 12px "Helvetica Neue", Helvetica, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  color: #fff;
+  background: linear-gradient(#8a9cb5, #5f7392);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+.web-recent-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  height: 44px;
+  padding: 0 14px;
+  border: 0;
+  border-bottom: 1px solid #e3e3e3;
+  background: #fff;
+  cursor: pointer;
+  font: 16px "Helvetica Neue", Helvetica, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  text-align: left;
+  color: #222;
+}
+.web-recent-row svg { width: 15px; height: 15px; color: #9aa0a8; }
+.web-recent-row:active { background: linear-gradient(#0a8cf4, #0160e5); color: #fff; }
+.web-recent-none { margin: 20px; font-size: 14px; text-align: center; color: #9aa0a8; }
+
+.web-folder { flex-direction: row; align-items: center; gap: 10px; }
+.web-folder b { flex: 1; }
+.web-folder-icon { width: 22px; height: 22px; color: #4c566c; }
+.web-folder-icon svg { display: block; width: 22px; height: 22px; }
+.web-chev { font-size: 18px; color: #a6abb3 !important; }
+.web-day {
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #4c566c;
+  background: #eef1f4;
+  border-bottom: 1px solid #dde2e8;
+}
+
+/* 북마크(이동하지 않는 줄): 누를 때만 파랗게 */
+.web-static {
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid #e3e3e3;
+  background: #fff;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+.web-static:active { background: linear-gradient(#0a8cf4, #0160e5); }
+.web-static:active b,
+.web-static:active span { color: #fff; }
+.web-book span { overflow-wrap: anywhere; }
+.web-recent-row span { flex: 1; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.web-recent-time { flex: none; font-size: 12px; color: #8a8f99; }
+.web-recent-row:active .web-recent-time { color: #fff; }
+.ml-addr { color: #8a8f98; font-size: 12px; }
+/* 카메라 롤 비디오 표시 */
+.pr-vid {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 16px;
+  padding: 0 4px;
+  font: bold 10px "Helvetica Neue", Helvetica, sans-serif;
+  color: #fff;
+  background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75));
+}
+.pr-vid svg { width: 14px; height: 9px; }
+video.pv-img { background: #000; }
+/* 음악: 재생 시간, 재생목록 머리 */
+.mu-dur { flex: none; font-size: 13px; color: #8a8f98; }
+.mu-pl-head { padding: 8px 14px; font-size: 13px; color: #6c727c; background: #f2f3f5; border-bottom: 1px solid #ddd; }
+.mu-art.has-art { background: #000; }
+.mu-art.has-art { position: relative; min-height: 0; }
+.mu-art.has-art img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }

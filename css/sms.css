@@ -1,0 +1,186 @@
+/*
+ * 메시지(문자) 앱 — iOS 6 스타일
+ */
+
+/* ---------- 메시지함 ---------- */
+.sms-list .scr-body { background: #fff; }
+
+.sms-row {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-bottom: 1px solid #e0e0e0;
+  background: #fff;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+  color: #000;
+}
+.sms-row:active { background: linear-gradient(#0a8cf4, #0160e5); }
+.sms-row:active .sms-name,
+.sms-row:active .sms-time,
+.sms-row:active .sms-preview { color: #fff; }
+.sms-row:focus-visible { outline: 2px solid #0a8cf4; outline-offset: -2px; }
+
+.sms-dot {
+  flex: none;
+  width: 26px;
+  display: flex;
+  justify-content: center;
+  padding-top: 15px;
+}
+.sms-dot.is-on::before {
+  content: "";
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #8cc6ff, #1f6fe0);
+  box-shadow: inset 0 0 0 1px rgba(0, 40, 120, 0.3);
+}
+
+.sms-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 10px 10px 10px 0;
+}
+.sms-top { display: flex; align-items: center; gap: 6px; }
+.sms-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 17px;
+  font-weight: bold;
+}
+.sms-time { flex: none; font-size: 14px; color: #2a6fd3; }
+.sms-chev { flex: none; width: 8px; height: 13px; }
+.sms-preview {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 14px;
+  line-height: 1.35;
+  color: #7a7f88;
+  overflow-wrap: anywhere;
+}
+
+/* ---------- 대화 화면 ---------- */
+.sms-room .scr-body { background: #dbe2ed; }
+.sms-log { padding: 4px 0 10px; }
+
+.sms-stamp {
+  margin: 12px 0 6px;
+  font-size: 12px;
+  font-weight: bold;
+  text-align: center;
+  color: #8a93a1;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+.sms-status {
+  padding: 2px 16px 0;
+  font-size: 11px;
+  font-weight: bold;
+  text-align: right;
+  color: #8a93a1;
+}
+
+.sms-line { display: flex; padding: 3px 14px; }
+.sms-line.me { justify-content: flex-end; }
+
+.sms-b {
+  --tail: #dcdcdc;
+  position: relative;
+  z-index: 0;
+  max-width: 220px;
+  padding: 6px 12px 7px;
+  border-radius: 17px;
+  font-size: 16px;
+  line-height: 1.3;
+  color: #000;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.85);
+}
+.sms-b.is-them {
+  background: linear-gradient(#ffffff 0%, #efefef 50%, #dcdcdc 100%);
+  border: 1px solid rgba(0, 0, 0, 0.18);
+}
+.sms-b.is-me {
+  --tail: #7cbdf6;
+  background: linear-gradient(#d6ecfe 0%, #a7d3fb 50%, #7cbdf6 100%);
+  border: 1px solid rgba(30, 80, 140, 0.32);
+}
+.sms-b.is-me.is-sms {
+  --tail: #8fd96c;
+  background: linear-gradient(#e6fad6 0%, #b8eb9a 50%, #8fd96c 100%);
+  border-color: rgba(40, 110, 20, 0.32);
+}
+
+/* 말풍선 꼬리 */
+.sms-tail {
+  position: absolute;
+  bottom: 0;
+  z-index: -1;
+  width: 14px;
+  height: 16px;
+  fill: var(--tail);
+}
+.sms-b.is-me .sms-tail { right: -7px; }
+.sms-b.is-them .sms-tail { left: -7px; transform: scaleX(-1); }
+
+/* 사진 말풍선 */
+.sms-b.is-photo { padding: 3px; line-height: 0; border-radius: 12px; }
+.sms-b.is-photo img { display: block; width: 150px; border-radius: 9px; }
+.sms-photo-slot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 150px;
+  height: 110px;
+  border-radius: 9px;
+  font-size: 12px;
+  line-height: 1;
+  color: #8a8f99;
+  background: repeating-linear-gradient(-45deg, #dde0e7 0 7px, #e8eaef 7px 14px);
+}
+
+/* 입력 막대: 카메라 · 입력칸 · 전송 */
+.sms-input { gap: 7px; padding: 0 6px; }
+.sms-cam {
+  flex: none;
+  width: 36px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid #8a919a;
+  border-radius: 6px;
+  cursor: pointer;
+  background: linear-gradient(#fdfdfd, #d7dade);
+  box-shadow: inset 0 1px 0 #fff, 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+.sms-cam svg { display: block; width: 22px; height: 17px; margin: auto; fill: #5d636c; }
+.sms-cam:active { background: linear-gradient(#d7dade, #b9bec5); }
+.sms-input .chat-field { height: 30px; border-radius: 15px; }
+
+.sms-send {
+  height: 30px;
+  padding: 0 13px;
+  border-radius: 15px;
+  color: #fff;
+  border: 1px solid rgba(0, 40, 110, 0.55);
+  background: linear-gradient(#80b8f6 0%, #3a7fe3 50%, #2468d4 51%, #3d82e6 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+.sms-send:disabled {
+  opacity: 1;
+  color: #e8edf5;
+  border-color: rgba(0, 40, 110, 0.3);
+  background: linear-gradient(#b7d1f3 0%, #8db3e8 50%, #7ea7e1 51%, #8fb3e7 100%);
+}
