@@ -197,10 +197,10 @@ YUSHI.data.wink = {
       unread: 0,
       messages: [
         { from: "c13",   text: "내일 피씨방ㄱ?", time: "2013-01-17 21:21" },
-        { from: "yushi", text: "내일 코레오 도와줘야 하는 거 있어", time: "2013-01-17 21:22" },
+        { from: "yushi", text: "내일 작품 도와줘야 하는 거 있어", time: "2013-01-17 21:22" },
         { from: "c13",   text: "아 ㅇㅋ", time: "2013-01-17 21:22" },
-        { from: "c13",   text: "근데 뭔 코레오?", time: "2013-01-17 21:22" },
-        { from: "yushi", text: "한국무용인데 백업 도와달래", time: "2013-01-17 21:23" },
+        { from: "c13",   text: "근데 뭔 작품?", time: "2013-01-17 21:22" },
+        { from: "yushi", text: "한국무용", time: "2013-01-17 21:23" },
         { from: "c13",   text: "아하 파이팅", time: "2013-01-17 21:23" },
         { from: "c13",   text: "피파 꼬", time: "2013-02-02 16:23" },
         { from: "yushi", text: "ok", time: "2013-02-02 16:30" },
