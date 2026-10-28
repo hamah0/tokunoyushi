@@ -175,7 +175,7 @@ YUSHI.appScreens = YUSHI.appScreens || {};
         S.unlocked = S.unlocked || {}; S.callsDone = S.callsDone || {};
         var canRun = script && (!script.unlock || S.unlocked[script.unlock]) && !S.callsDone[c.id];
         function later(f, sec) { timers.push(setTimeout(f, sec * 1000)); }
-        function clearAll() { timers.forEach(clearTimeout); clearInterval(tickTimer); }
+        function clearAll() { timers.forEach(clearTimeout); clearInterval(tickTimer); if (typeof stopRing === "function") stopRing(); }
         function two(n) { return (n < 10 ? "0" : "") + n; }
         function mmss(n) { return two(Math.floor(n / 60)) + ":" + two(n % 60); }
         function finish() {
@@ -188,11 +188,23 @@ YUSHI.appScreens = YUSHI.appScreens || {};
           dial = "";
           stack.pop();
         }
+        // 통화 연결음: 연결음이 정해진 연락처에 걸면, 받을 때까지(또는 종료할 때까지) 반복
+        var ring = null;
+        if (script && script.ringback) {
+          try {
+            ring = new Audio(script.ringback);
+            ring.loop = true;
+            var rp = ring.play(); if (rp && rp.catch) rp.catch(function () {});
+          } catch (e) { ring = null; }
+        }
+        function stopRing() { if (ring) { ring.pause(); ring = null; } }
+
         if (canRun) {
           var sub = document.createElement("div");
           sub.className = "call-sub";
           body.appendChild(sub);
           later(function () {
+            stopRing();
             connected = true;
             S.callsDone[c.id] = true;
             var sec = 0;
