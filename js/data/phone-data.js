@@ -111,6 +111,7 @@ YUSHI.data.phone = {
     { number: "070-989-1365",    type: "in", time: "2013-03-22 11:03" },
     { number: "070-989-1365",    type: "missed", time: "2013-03-21 19:13" },
     { number: "070-989-1365",    type: "missed", time: "2013-03-21 18:52" },
+    { number: "070-989-1365",    type: "in", time: "2013-03-19 18:47" },
     { who: "c13",                type: "in", time: "2013-03-16 16:05" },
     { number: "02-736-2091",     type: "missed", time: "2013-03-13 14:51" },
     { who: "jiu",                type: "in", time: "2013-03-12 22:10" },
