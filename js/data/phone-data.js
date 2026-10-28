@@ -85,7 +85,8 @@ YUSHI.data.phone = {
   callScripts: {
     sion: {
       unlock: "sionCall",
-      ring: 4,
+      ringback: "assets/sounds/ringback.mp3",   // 받을 때까지 나는 통화 연결음
+      ring: 8,
       lines: [
         { after: 1.5, text: "여보세요?" },
         { after: 3.5, text: "우시 놀랐지이" },
